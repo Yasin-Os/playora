@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Playora</string>
+    <string name="tab_video">Video</string>
+    <string name="tab_music">Music</string>
+    <string name="tab_photos">Photos</string>
+    <string name="video_coming_soon">Video library is coming in Phase 1</string>
+    <string name="music_coming_soon">Music library is coming in Phase 1</string>
+    <string name="photos_coming_soon">Photo viewer is coming in Phase 3</string>
+</resources>
