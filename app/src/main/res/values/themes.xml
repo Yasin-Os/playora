@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The Compose theme lives in ui/theme/Theme.kt; this is only the
+         window theme used before Compose draws the first frame. -->
+    <style name="Theme.Playora" parent="android:Theme.Material.NoActionBar" />
+</resources>
