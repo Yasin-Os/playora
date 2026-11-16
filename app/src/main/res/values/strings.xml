@@ -20,4 +20,27 @@
     <string name="pause">Pause</string>
     <string name="fullscreen">Fullscreen</string>
     <string name="exit_fullscreen">Exit fullscreen</string>
+
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="delete">Delete</string>
+    <string name="remove">Remove</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="minutes">minutes</string>
+
+    <string name="all_songs">All songs</string>
+    <string name="playlists">Playlists</string>
+    <string name="favorites">Favorites</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="playlist_name_hint">Playlist name</string>
+    <string name="no_playlists">No playlists yet — create your first one</string>
+    <string name="no_favorites">No favorites yet — tap the heart on a song</string>
+    <string name="no_songs_in_playlist">No songs in this playlist yet</string>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="queue">Queue</string>
+    <string name="queue_empty">Queue is empty — play a song first</string>
+    <string name="sleep_timer">Sleep timer</string>
+    <string name="sleep_timer_off">Off</string>
 </resources>
