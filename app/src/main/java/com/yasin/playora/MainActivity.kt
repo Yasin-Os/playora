@@ -33,6 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.yasin.playora.player.PlaybackViewModel
+import com.yasin.playora.ui.music.EqualizerScreen
 import com.yasin.playora.ui.music.MusicListScreen
 import com.yasin.playora.ui.music.PlaylistDetailScreen
 import com.yasin.playora.ui.music.QueueScreen
@@ -132,7 +133,8 @@ private fun PlayoraApp() {
                 MusicListScreen(
                     viewModel = playbackViewModel,
                     onPlaylistClick = { id -> navController.navigate("playlist/$id") },
-                    onQueueClick = { navController.navigate("queue") }
+                    onQueueClick = { navController.navigate("queue") },
+                    onEqualizerClick = { navController.navigate("equalizer") }
                 )
             }
             composable(
@@ -151,6 +153,9 @@ private fun PlayoraApp() {
                     viewModel = playbackViewModel,
                     onBack = { navController.popBackStack() }
                 )
+            }
+            composable("equalizer") {
+                EqualizerScreen(onBack = { navController.popBackStack() })
             }
             composable("photos") {
                 PhotoGridScreen(
