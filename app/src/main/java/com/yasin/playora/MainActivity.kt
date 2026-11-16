@@ -1,5 +1,6 @@
 package com.yasin.playora
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,11 +25,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.yasin.playora.ui.music.MusicListScreen
 import com.yasin.playora.ui.theme.PlayoraTheme
+import com.yasin.playora.ui.video.VideoListScreen
+import com.yasin.playora.ui.video.VideoPlayerScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,26 +58,33 @@ private val tabs = listOf(
 @Composable
 private fun PlayoraApp() {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    // The bottom bar shows only on the three main tabs, not on the player.
+    val showBottomBar = currentDestination?.hierarchy?.any { dest ->
+        tabs.any { it.route == dest.route }
+    } == true
+
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                tabs.forEach { tab ->
-                    NavigationBarItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true,
-                        onClick = {
-                            navController.navigate(tab.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+            if (showBottomBar) {
+                NavigationBar {
+                    tabs.forEach { tab ->
+                        NavigationBarItem(
+                            selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true,
+                            onClick = {
+                                navController.navigate(tab.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Icon(tab.icon, contentDescription = null) },
-                        label = { Text(stringResource(tab.labelRes)) }
-                    )
+                            },
+                            icon = { Icon(tab.icon, contentDescription = null) },
+                            label = { Text(stringResource(tab.labelRes)) }
+                        )
+                    }
                 }
             }
         }
@@ -81,8 +94,28 @@ private fun PlayoraApp() {
             startDestination = "video",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("video") { PlaceholderScreen(stringResource(R.string.video_coming_soon)) }
-            composable("music") { PlaceholderScreen(stringResource(R.string.music_coming_soon)) }
+            composable("video") {
+                VideoListScreen(
+                    onVideoClick = { video ->
+                        navController.navigate(
+                            "video_player?uri=${Uri.encode(video.uri)}" +
+                                "&title=${Uri.encode(video.displayName)}"
+                        )
+                    }
+                )
+            }
+            composable(
+                route = "video_player?uri={uri}&title={title}",
+                arguments = listOf(
+                    navArgument("uri") { type = NavType.StringType },
+                    navArgument("title") { type = NavType.StringType; defaultValue = "" }
+                )
+            ) { backStackEntry ->
+                val uri = backStackEntry.arguments?.getString("uri") ?: ""
+                val title = backStackEntry.arguments?.getString("title") ?: ""
+                VideoPlayerScreen(uri = uri, title = title)
+            }
+            composable("music") { MusicListScreen() }
             composable("photos") { PlaceholderScreen(stringResource(R.string.photos_coming_soon)) }
         }
     }
