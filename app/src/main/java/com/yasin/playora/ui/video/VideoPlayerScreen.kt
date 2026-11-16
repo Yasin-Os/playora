@@ -2,8 +2,11 @@ package com.yasin.playora.ui.video
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.pm.ActivityInfo
+import android.media.AudioManager
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +52,7 @@ import com.yasin.playora.data.PlaybackHistoryStore
 import com.yasin.playora.player.PlayerManager
 import com.yasin.playora.ui.common.formatDuration
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class VideoPlayerViewModel(application: Application) : AndroidViewModel(application) {
     val playerManager = PlayerManager(application)
@@ -86,6 +91,10 @@ fun VideoPlayerScreen(uri: String, title: String) {
     var duration by remember { mutableStateOf(0L) }
     var sliderPosition by remember { mutableStateOf<Float?>(null) }
     var fullscreen by remember { mutableStateOf(false) }
+    var gestureHint by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
+    val audioManager =
+        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     LaunchedEffect(uri) { viewModel.play(uri) }
 
@@ -142,6 +151,7 @@ fun VideoPlayerScreen(uri: String, title: String) {
                 modifier = Modifier.fillMaxSize()
             )
             // Double-tap left/right = seek -10s / +10s.
+            // Vertical drag: left half = brightness, right half = volume.
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -160,7 +170,62 @@ fun VideoPlayerScreen(uri: String, title: String) {
                             }
                         )
                     }
-            )
+                    .pointerInput(Unit) {
+                        var isLeft = true
+                        var brightness = 0.5f
+                        detectDragGestures(
+                            onDragStart = { offset ->
+                                isLeft = offset.x < size.width / 2f
+                                brightness = activity?.window?.attributes?.screenBrightness
+                                    ?.takeIf { it >= 0f } ?: 0.5f
+                            },
+                            onDrag = { _, dragAmount ->
+                                val height = size.height.toFloat().coerceAtLeast(1f)
+                                if (isLeft) {
+                                    brightness = (brightness - dragAmount.y / height)
+                                        .coerceIn(0.05f, 1f)
+                                    activity?.window?.let { window ->
+                                        val attrs = window.attributes
+                                        attrs.screenBrightness = brightness
+                                        window.attributes = attrs
+                                    }
+                                    gestureHint = "Brightness ${(brightness * 100).toInt()}%"
+                                } else {
+                                    val max = audioManager
+                                        .getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                                    val current = audioManager
+                                        .getStreamVolume(AudioManager.STREAM_MUSIC)
+                                    val next = (current - dragAmount.y / height * max)
+                                        .toInt().coerceIn(0, max)
+                                    audioManager.setStreamVolume(
+                                        AudioManager.STREAM_MUSIC, next, 0
+                                    )
+                                    gestureHint = "Volume ${next * 100 / max.coerceAtLeast(1)}%"
+                                }
+                            },
+                            onDragEnd = {
+                                scope.launch {
+                                    delay(900)
+                                    gestureHint = null
+                                }
+                            }
+                        )
+                    }
+            ) {
+                gestureHint?.let { hint ->
+                    Text(
+                        text = hint,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .background(
+                                Color.Black.copy(alpha = 0.6f),
+                                MaterialTheme.shapes.medium
+                            )
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                }
+            }
             if (!fullscreen) {
                 Text(
                     text = title,
