@@ -10,7 +10,7 @@ Built with **Kotlin**, **Jetpack Compose** and **Media3 (ExoPlayer)**. No ads, n
 
 ## Status
 
-🚧 **v0.1.0 — skeleton.** The project structure, navigation and player/media/photo foundations are in place. Playback, browsing and editing features land phase by phase — see [docs/ROADMAP.md](docs/ROADMAP.md).
+✅ **v0.2.0 — video, music and photos all working.** See [docs/ROADMAP.md](docs/ROADMAP.md) for the full plan.
 
 ## Tech stack
 
