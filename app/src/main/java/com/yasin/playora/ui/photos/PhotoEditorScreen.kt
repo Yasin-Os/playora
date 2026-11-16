@@ -92,22 +92,22 @@ class PhotoEditorViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun setBrightness(value: Float) {
+    fun updateBrightness(value: Float) {
         brightness = value
         recompute()
     }
 
-    fun setContrast(value: Float) {
+    fun updateContrast(value: Float) {
         contrast = value
         recompute()
     }
 
-    fun setSaturation(value: Float) {
+    fun updateSaturation(value: Float) {
         saturation = value
         recompute()
     }
 
-    fun setFilter(newFilter: Filter) {
+    fun updateFilter(newFilter: Filter) {
         filter = newFilter
         recompute()
     }
@@ -223,19 +223,19 @@ fun PhotoEditorScreen(uri: String, onBack: () -> Unit, modifier: Modifier = Modi
                 label = stringResource(R.string.brightness),
                 value = viewModel.brightness,
                 range = -1f..1f,
-                onChange = { viewModel.setBrightness(it) }
+                onChange = { viewModel.updateBrightness(it) }
             )
             EditSlider(
                 label = stringResource(R.string.contrast),
                 value = viewModel.contrast,
                 range = 0f..2f,
-                onChange = { viewModel.setContrast(it) }
+                onChange = { viewModel.updateContrast(it) }
             )
             EditSlider(
                 label = stringResource(R.string.saturation),
                 value = viewModel.saturation,
                 range = 0f..2f,
-                onChange = { viewModel.setSaturation(it) }
+                onChange = { viewModel.updateSaturation(it) }
             )
             Row {
                 Button(onClick = { viewModel.rotate() }, modifier = Modifier.weight(1f)) {
@@ -258,7 +258,7 @@ fun PhotoEditorScreen(uri: String, onBack: () -> Unit, modifier: Modifier = Modi
                 items(Filter.entries) { item ->
                     FilterChip(
                         selected = viewModel.filter == item,
-                        onClick = { viewModel.setFilter(item) },
+                        onClick = { viewModel.updateFilter(item) },
                         label = { Text(stringResource(filterLabel(item))) },
                         modifier = Modifier.padding(end = 8.dp)
                     )
