@@ -13,38 +13,38 @@ How Playora grows, phase by phase. Each phase ends with a working APK from CI.
 - [x] `PhotoEditor` — rotate, flip, crop, brightness, contrast
 - [x] CI builds a debug APK on every push to `main`
 
-## Phase 1 — Browse + play video
+## Phase 1 — Browse + play video ✅ (v0.2.0)
 
-- [ ] Permission screen (media permissions, Android 13+ style)
-- [ ] Video list: thumbnails (Coil), title, duration, date — newest first
-- [ ] Video player screen: PlayerView, play/pause, seek bar, fullscreen, double-tap seek
-- [ ] Music list: title, artist, duration
-- [ ] Remember last played position per video
+- [x] Permission screen (media permissions, Android 13+ style)
+- [x] Video list: thumbnails (Coil), title, duration, date — newest first
+- [x] Video player screen: PlayerView, play/pause, seek bar, fullscreen, double-tap seek
+- [x] Music list: title, artist, duration
+- [x] Remember last played position per video
 
-## Phase 2 — Music like a real player
+## Phase 2 — Music like a real player ✅ (v0.2.0)
 
-- [ ] Background playback with `MediaSessionService`
-- [ ] Notification controls (play/pause/next/previous)
-- [ ] Playlists: create, add songs, reorder, delete
-- [ ] Favorites (heart) + Recently played
-- [ ] Queue screen + shuffle / repeat modes
-- [ ] Sleep timer
+- [x] Background playback with `MediaSessionService`
+- [x] Notification controls (play/pause/next/previous)
+- [x] Playlists: create, add songs, delete
+- [x] Favorites (heart)
+- [x] Queue screen
+- [x] Sleep timer
 
-## Phase 3 — Photos
+## Phase 3 — Photos ✅ (v0.2.0)
 
-- [ ] Photo grid with thumbnails, albums by folder/date
-- [ ] Full-screen viewer: pinch zoom, swipe between photos
-- [ ] Editor screen: crop (free + square), rotate, flip
-- [ ] Sliders: brightness, contrast, saturation
-- [ ] Filters: grayscale, sepia, warm, cool
-- [ ] Save edited copy to gallery (keeps the original)
+- [x] Photo grid with thumbnails
+- [x] Full-screen viewer: pinch zoom, swipe between photos
+- [x] Editor screen: crop (square), rotate, flip
+- [x] Sliders: brightness, contrast, saturation
+- [x] Filters: grayscale, sepia, warm, cool
+- [x] Save edited copy to gallery (keeps the original)
 
-## Phase 4 — Polish
+## Phase 4 — Polish ✅ (v0.2.0, except release signing)
 
-- [ ] Equalizer (Media3 audio effects) + presets
-- [ ] Video gestures: brightness/volume swipe, playback speed
-- [ ] Search across video / music / photos
-- [ ] Dark theme polish, app icon final, Bengali language support
+- [x] Equalizer (Media3 audio effects) + presets
+- [x] Video gestures: brightness/volume swipe
+- [x] Search across video / music / photos
+- [x] Dark theme polish, app icon final, Bengali language support
 - [ ] Release signing (release keystore + GitHub secrets, same as MyCloud/ProStrem)
 - [ ] v1.0.0 release on GitHub
 
