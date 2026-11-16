@@ -62,6 +62,52 @@ object PhotoEditor {
         return applyMatrix(source, matrix)
     }
 
+    /** saturation: 0f (grey) .. 2f (vivid), 1f = unchanged. */
+    fun adjustSaturation(source: Bitmap, saturation: Float): Bitmap {
+        val matrix = ColorMatrix().apply { setSaturation(saturation.coerceIn(0f, 2f)) }
+        return applyMatrix(source, matrix)
+    }
+
+    fun grayscale(source: Bitmap): Bitmap = adjustSaturation(source, 0f)
+
+    fun sepia(source: Bitmap): Bitmap {
+        val matrix = ColorMatrix(
+            floatArrayOf(
+                0.393f, 0.769f, 0.189f, 0f, 0f,
+                0.349f, 0.686f, 0.168f, 0f, 0f,
+                0.272f, 0.534f, 0.131f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+            )
+        )
+        return applyMatrix(source, matrix)
+    }
+
+    /** Warmer tones: boost red, lower blue. */
+    fun warm(source: Bitmap): Bitmap {
+        val matrix = ColorMatrix(
+            floatArrayOf(
+                1.1f, 0f, 0f, 0f, 0f,
+                0f, 1.0f, 0f, 0f, 0f,
+                0f, 0f, 0.9f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+            )
+        )
+        return applyMatrix(source, matrix)
+    }
+
+    /** Cooler tones: lower red, boost blue. */
+    fun cool(source: Bitmap): Bitmap {
+        val matrix = ColorMatrix(
+            floatArrayOf(
+                0.9f, 0f, 0f, 0f, 0f,
+                0f, 1.0f, 0f, 0f, 0f,
+                0f, 0f, 1.1f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+            )
+        )
+        return applyMatrix(source, matrix)
+    }
+
     private fun applyMatrix(source: Bitmap, matrix: ColorMatrix): Bitmap {
         val result = Bitmap.createBitmap(
             source.width, source.height,
