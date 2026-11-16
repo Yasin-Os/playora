@@ -7,4 +7,17 @@
     <string name="video_coming_soon">Video library is coming in Phase 1</string>
     <string name="music_coming_soon">Music library is coming in Phase 1</string>
     <string name="photos_coming_soon">Photo viewer is coming in Phase 3</string>
+
+    <string name="permission_title">Media permission needed</string>
+    <string name="permission_message">Playora needs access to your videos, music and photos to show them here.</string>
+    <string name="permission_grant">Allow access</string>
+
+    <string name="no_videos">No videos found on this device</string>
+    <string name="no_music">No music found on this device</string>
+    <string name="no_photos">No photos found on this device</string>
+
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="fullscreen">Fullscreen</string>
+    <string name="exit_fullscreen">Exit fullscreen</string>
 </resources>
