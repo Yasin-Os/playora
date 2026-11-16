@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Playora</string>
+    <string name="tab_video">ভিডিও</string>
+    <string name="tab_music">গান</string>
+    <string name="tab_photos">ছবি</string>
+    <string name="video_coming_soon">ভিডিও লাইব্রেরি আসছে Phase 1-এ</string>
+    <string name="music_coming_soon">গানের লাইব্রেরি আসছে Phase 1-এ</string>
+    <string name="photos_coming_soon">ছবি দেখার সুবিধা আসছে Phase 3-এ</string>
+
+    <string name="permission_title">মিডিয়া অনুমতি দরকার</string>
+    <string name="permission_message">তোমার ভিডিও, গান আর ছবি দেখাতে Playora-র মিডিয়া অনুমতি লাগবে।</string>
+    <string name="permission_grant">অনুমতি দিন</string>
+
+    <string name="no_videos">ফোনে কোনো ভিডিও পাওয়া যায়নি</string>
+    <string name="no_music">ফোনে কোনো গান পাওয়া যায়নি</string>
+    <string name="no_photos">ফোনে কোনো ছবি পাওয়া যায়নি</string>
+
+    <string name="play">চালান</string>
+    <string name="pause">থামান</string>
+    <string name="fullscreen">ফুলস্ক্রিন</string>
+    <string name="exit_fullscreen">ফুলস্ক্রিন বন্ধ করুন</string>
+
+    <string name="back">ফিরুন</string>
+    <string name="cancel">বাতিল</string>
+    <string name="create">তৈরি করুন</string>
+    <string name="delete">মুছুন</string>
+    <string name="remove">সরান</string>
+    <string name="next">পরেরটি</string>
+    <string name="previous">আগেরটি</string>
+    <string name="minutes">মিনিট</string>
+
+    <string name="all_songs">সব গান</string>
+    <string name="playlists">প্লেলিস্ট</string>
+    <string name="favorites">পছন্দের</string>
+    <string name="new_playlist">নতুন প্লেলিস্ট</string>
+    <string name="playlist_name_hint">প্লেলিস্টের নাম</string>
+    <string name="no_playlists">এখনো প্লেলিস্ট নেই — প্রথমটি তৈরি করুন</string>
+    <string name="no_favorites">এখনো পছন্দের গান নেই — গানের হার্টে চাপুন</string>
+    <string name="no_songs_in_playlist">এই প্লেলিস্টে এখনো গান নেই</string>
+    <string name="add_to_playlist">প্লেলিস্টে যোগ করুন</string>
+    <string name="queue">কিউ</string>
+    <string name="queue_empty">কিউ খালি — আগে একটি গান চালান</string>
+    <string name="sleep_timer">স্লিপ টাইমার</string>
+    <string name="sleep_timer_off">বন্ধ</string>
+
+    <string name="edit">এডিট</string>
+    <string name="save">সংরক্ষণ</string>
+    <string name="saved">Pictures/Playora-তে সংরক্ষিত হয়েছে</string>
+    <string name="rotate">ঘোরান</string>
+    <string name="flip">উল্টান</string>
+    <string name="crop">ক্রপ</string>
+    <string name="brightness">উজ্জ্বলতা</string>
+    <string name="contrast">কনট্রাস্ট</string>
+    <string name="saturation">স্যাচুরেশন</string>
+    <string name="filter_none">কোনোটিই নয়</string>
+    <string name="filter_grayscale">সাদা-কালো</string>
+    <string name="filter_sepia">সেপিয়া</string>
+    <string name="filter_warm">উষ্ণ</string>
+    <string name="filter_cool">শীতল</string>
+
+    <string name="equalizer">ইকুয়ালাইজার</string>
+    <string name="bass_boost">বেস বুস্ট</string>
+    <string name="preset_normal">সাধারণ</string>
+    <string name="preset_bass">বেস</string>
+    <string name="preset_treble">ট্রেবল</string>
+    <string name="preset_vocal">ভোকাল</string>
+    <string name="search_hint">খুঁজুন…</string>
+    <string name="eq_play_first">প্রথমে একটি গান চালান, তারপর ইকুয়ালাইজার কাজ করবে।</string>
+    <string name="enabled">চালু</string>
+</resources>
