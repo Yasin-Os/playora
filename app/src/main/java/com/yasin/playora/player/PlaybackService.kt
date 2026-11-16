@@ -16,6 +16,7 @@ class PlaybackService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         val player = ExoPlayer.Builder(this).build()
+        audioSessionId = player.audioSessionId
         mediaSession = MediaSession.Builder(this, player).build()
     }
 
@@ -29,6 +30,14 @@ class PlaybackService : MediaSessionService() {
             release()
         }
         mediaSession = null
+        audioSessionId = 0
         super.onDestroy()
+    }
+
+    companion object {
+        /** Audio session id of the service player (0 until the player exists). */
+        @Volatile
+        var audioSessionId: Int = 0
+            private set
     }
 }
