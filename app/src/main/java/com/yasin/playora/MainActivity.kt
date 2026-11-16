@@ -36,6 +36,10 @@ import com.yasin.playora.player.PlaybackViewModel
 import com.yasin.playora.ui.music.MusicListScreen
 import com.yasin.playora.ui.music.PlaylistDetailScreen
 import com.yasin.playora.ui.music.QueueScreen
+import com.yasin.playora.ui.photos.PhotoEditorScreen
+import com.yasin.playora.ui.photos.PhotoGridScreen
+import com.yasin.playora.ui.photos.PhotoViewModel
+import com.yasin.playora.ui.photos.PhotoViewerScreen
 import com.yasin.playora.ui.theme.PlayoraTheme
 import com.yasin.playora.ui.video.VideoListScreen
 import com.yasin.playora.ui.video.VideoPlayerScreen
@@ -65,6 +69,8 @@ private fun PlayoraApp() {
     // One playback controller shared by every music screen, so music keeps
     // playing while navigating between lists, playlists and the queue.
     val playbackViewModel: PlaybackViewModel = viewModel()
+    // One photo list shared by the grid, the viewer and the editor.
+    val photoViewModel: PhotoViewModel = viewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     // The bottom bar shows only on the three main tabs.
@@ -146,7 +152,35 @@ private fun PlayoraApp() {
                     onBack = { navController.popBackStack() }
                 )
             }
-            composable("photos") { PlaceholderScreen(stringResource(R.string.photos_coming_soon)) }
+            composable("photos") {
+                PhotoGridScreen(
+                    viewModel = photoViewModel,
+                    onPhotoClick = { index -> navController.navigate("photo_viewer?index=$index") }
+                )
+            }
+            composable(
+                route = "photo_viewer?index={index}",
+                arguments = listOf(
+                    navArgument("index") { type = NavType.IntType; defaultValue = 0 }
+                )
+            ) { backStackEntry ->
+                val index = backStackEntry.arguments?.getInt("index") ?: 0
+                PhotoViewerScreen(
+                    viewModel = photoViewModel,
+                    startIndex = index,
+                    onBack = { navController.popBackStack() },
+                    onEdit = { uri ->
+                        navController.navigate("photo_editor?uri=${Uri.encode(uri)}")
+                    }
+                )
+            }
+            composable(
+                route = "photo_editor?uri={uri}",
+                arguments = listOf(navArgument("uri") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val uri = backStackEntry.arguments?.getString("uri") ?: ""
+                PhotoEditorScreen(uri = uri, onBack = { navController.popBackStack() })
+            }
         }
     }
 }
