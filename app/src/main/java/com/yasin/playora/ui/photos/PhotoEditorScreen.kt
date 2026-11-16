@@ -56,7 +56,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private enum class Filter { NONE, GRAYSCALE, SEPIA, WARM, COOL }
+enum class Filter { NONE, GRAYSCALE, SEPIA, WARM, COOL }
 
 class PhotoEditorViewModel(application: Application) : AndroidViewModel(application) {
 
