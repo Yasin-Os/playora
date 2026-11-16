@@ -15,10 +15,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -38,6 +42,7 @@ fun VideoListScreen(onVideoClick: (LocalMedia) -> Unit, modifier: Modifier = Mod
         val viewModel: VideoViewModel = viewModel()
         val videos by viewModel.videos.collectAsState()
         val isLoading by viewModel.isLoading.collectAsState()
+        var query by remember { mutableStateOf("") }
         if (isLoading) {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
@@ -47,9 +52,21 @@ fun VideoListScreen(onVideoClick: (LocalMedia) -> Unit, modifier: Modifier = Mod
                 Text(stringResource(R.string.no_videos))
             }
         } else {
-            LazyColumn(modifier = modifier.fillMaxSize()) {
-                items(videos, key = { it.id }) { video ->
-                    VideoRow(video, onClick = { onVideoClick(video) })
+            Column(modifier = modifier.fillMaxSize()) {
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = { query = it },
+                    label = { Text(stringResource(R.string.search_hint)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().padding(12.dp)
+                )
+                val filtered = videos.filter {
+                    it.displayName.contains(query, ignoreCase = true)
+                }
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    items(filtered, key = { it.id }) { video ->
+                        VideoRow(video, onClick = { onVideoClick(video) })
+                    }
                 }
             }
         }
