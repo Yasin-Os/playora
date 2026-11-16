@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -70,6 +71,11 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
     // Video frame thumbnails in the video list
     implementation("io.coil-kt:coil-video:2.7.0")
+
+    // Room — playlists & favorites
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
