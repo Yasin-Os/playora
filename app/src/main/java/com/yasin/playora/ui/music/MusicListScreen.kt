@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Equalizer
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MusicNote
@@ -61,10 +62,12 @@ fun MusicListScreen(
     viewModel: PlaybackViewModel,
     onPlaylistClick: (Long) -> Unit,
     onQueueClick: () -> Unit,
+    onEqualizerClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     PermissionGate {
         var tab by remember { mutableStateOf(MusicTab.ALL) }
+        var query by remember { mutableStateOf("") }
         var showNewPlaylist by remember { mutableStateOf(false) }
         var addToPlaylistSong by remember { mutableStateOf<LocalMedia?>(null) }
         var showSleepTimer by remember { mutableStateOf(false) }
@@ -97,14 +100,32 @@ fun MusicListScreen(
             }
             Box(modifier = Modifier.weight(1f)) {
                 when (tab) {
-                    MusicTab.ALL -> SongList(
-                        songs = songs,
-                        currentUri = queue.getOrNull(currentIndex)?.mediaId,
-                        favoriteUris = favoriteUris,
-                        onSongClick = { index -> viewModel.playSongs(songs, index) },
-                        onFavoriteClick = { viewModel.toggleFavorite(it) },
-                        onAddToPlaylistClick = { addToPlaylistSong = it }
-                    )
+                    MusicTab.ALL -> {
+                        val filtered = songs.filter {
+                            it.displayName.contains(query, ignoreCase = true)
+                        }
+                        Column(Modifier.fillMaxSize()) {
+                            OutlinedTextField(
+                                value = query,
+                                onValueChange = { query = it },
+                                label = { Text(stringResource(R.string.search_hint)) },
+                                singleLine = true,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                            )
+                            Box(Modifier.weight(1f)) {
+                                SongList(
+                                    songs = filtered,
+                                    currentUri = queue.getOrNull(currentIndex)?.mediaId,
+                                    favoriteUris = favoriteUris,
+                                    onSongClick = { index -> viewModel.playSongs(filtered, index) },
+                                    onFavoriteClick = { viewModel.toggleFavorite(it) },
+                                    onAddToPlaylistClick = { addToPlaylistSong = it }
+                                )
+                            }
+                        }
+                    }
                     MusicTab.PLAYLISTS -> PlaylistList(
                         playlists = playlists,
                         viewModel = viewModel,
@@ -134,7 +155,8 @@ fun MusicListScreen(
                 MiniPlayer(
                     viewModel = viewModel,
                     onQueueClick = onQueueClick,
-                    onSleepTimerClick = { showSleepTimer = true }
+                    onSleepTimerClick = { showSleepTimer = true },
+                    onEqualizerClick = onEqualizerClick
                 )
             }
         }
@@ -399,7 +421,8 @@ private fun SleepTimerDialog(onDismiss: () -> Unit, onPick: (Int?) -> Unit) {
 private fun MiniPlayer(
     viewModel: PlaybackViewModel,
     onQueueClick: () -> Unit,
-    onSleepTimerClick: () -> Unit
+    onSleepTimerClick: () -> Unit,
+    onEqualizerClick: () -> Unit
 ) {
     val queue by viewModel.queue.collectAsState()
     val currentIndex by viewModel.currentIndex.collectAsState()
@@ -445,6 +468,9 @@ private fun MiniPlayer(
             }
             IconButton(onClick = onSleepTimerClick) {
                 Icon(Icons.Filled.Timer, contentDescription = stringResource(R.string.sleep_timer))
+            }
+            IconButton(onClick = onEqualizerClick) {
+                Icon(Icons.Filled.Equalizer, contentDescription = stringResource(R.string.equalizer))
             }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
