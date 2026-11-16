@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -31,7 +32,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.yasin.playora.player.PlaybackViewModel
 import com.yasin.playora.ui.music.MusicListScreen
+import com.yasin.playora.ui.music.PlaylistDetailScreen
+import com.yasin.playora.ui.music.QueueScreen
 import com.yasin.playora.ui.theme.PlayoraTheme
 import com.yasin.playora.ui.video.VideoListScreen
 import com.yasin.playora.ui.video.VideoPlayerScreen
@@ -58,9 +62,12 @@ private val tabs = listOf(
 @Composable
 private fun PlayoraApp() {
     val navController = rememberNavController()
+    // One playback controller shared by every music screen, so music keeps
+    // playing while navigating between lists, playlists and the queue.
+    val playbackViewModel: PlaybackViewModel = viewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    // The bottom bar shows only on the three main tabs, not on the player.
+    // The bottom bar shows only on the three main tabs.
     val showBottomBar = currentDestination?.hierarchy?.any { dest ->
         tabs.any { it.route == dest.route }
     } == true
@@ -115,7 +122,30 @@ private fun PlayoraApp() {
                 val title = backStackEntry.arguments?.getString("title") ?: ""
                 VideoPlayerScreen(uri = uri, title = title)
             }
-            composable("music") { MusicListScreen() }
+            composable("music") {
+                MusicListScreen(
+                    viewModel = playbackViewModel,
+                    onPlaylistClick = { id -> navController.navigate("playlist/$id") },
+                    onQueueClick = { navController.navigate("queue") }
+                )
+            }
+            composable(
+                route = "playlist/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getLong("id") ?: 0L
+                PlaylistDetailScreen(
+                    playlistId = id,
+                    viewModel = playbackViewModel,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable("queue") {
+                QueueScreen(
+                    viewModel = playbackViewModel,
+                    onBack = { navController.popBackStack() }
+                )
+            }
             composable("photos") { PlaceholderScreen(stringResource(R.string.photos_coming_soon)) }
         }
     }
